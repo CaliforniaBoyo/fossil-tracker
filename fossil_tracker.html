@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fossil Tracker</title>
+        <style>
+            html{
+                font-family: Helvetica, sans-serif;
+                color: #4C3B23;
+                background-color: #272633;
+            }
+            
+            #title{
+                color: #F3E7D1;
+                padding: 10px;
+                font-size: 80px;
+            }
+            
+            .counter{
+                position: fixed;
+                left: 10px;
+                top: 10px;
+                border-radius: 5px;
+                border: 4px solid #DC9D87;
+                padding: 10px;
+                color: #F3E7D1;
+                font-size: 30px;
+                font-weight: bold;
+            }
+            
+            .container{
+                display: flex;
+                justify-content: space-between;
+                
+            }
+            
+            .list{
+                flex-direction: column;
+                color: #DC9D87;
+                background-color: #514E78;
+                border-radius: 25px;
+                flex: 1 1 0px;
+                margin: 20px;
+                font-size: 30px;
+                
+            }
+            
+            .fossil-item{
+                color: #F6EDDB;
+                background-color: #6B6798;
+                border-radius: 10px;
+                border: 2px solid #6B6798;
+                margin-bottom: 10px;
+                margin-left: 13px;
+                margin-right: 13px;
+            }
+            
+            .add-fossil{
+                border-radius: 5px;
+                background-color: green;
+            }
+            
+            .add-fossil:hover{
+                background-color: ForestGreen;
+                
+            }
+            
+            .delete-fossil{
+                border-radius: 5px;
+                background-color: DarkRed;
+                padding-top: 5px;
+                padding-bottom: 2px;
+            }
+            
+            .delete-fossil:hover{
+                background-color: FireBrick;
+                
+            }
+            
+            .delete-extra-fossil{
+                border-radius: 5px;
+                background-color: DarkRed;
+                padding-top: 5px;
+                padding-bottom: 2px;
+            }
+            
+            .delete-extra-fossil:hover{
+                background-color: FireBrick;
+                
+            }
+            
+            .add-extra-fossil{
+                border-radius: 5px;
+                background-color: DarkSlateBlue;
+                padding-top: 5px;
+                padding-bottom: 2px;
+            }
+            
+            .add-extra-fossil:hover{
+                background-color: DodgerBlue;
+            }
+            
+        </style>
+        <script>
+            const fossil_list = [{'name': 'Acanthostega', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/c/cc/NH-Furniture-acanthostega.png/revision/latest/scale-to-width-down/72?cb=20200404013825'}, {'name': 'Amber', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/3/32/NH-Furniture-amber.png/revision/latest/scale-to-width-down/72?cb=20200404013825'}, {'name': 'Ammonite', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/3/32/NH-Furniture-ammonite.png/revision/latest/scale-to-width-down/72?cb=20200404013825'}, {'name': 'Anomalocaris', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/2/2e/NH-Furniture-anomalocaris.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Archaeopteryx', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/9/99/NH-Furniture-archaeopteryx.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Australopith', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/b/b0/NH-Furniture-australopith.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Coprolite', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/04/NH-Furniture-coprolite.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Dinosaur track', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/a/a5/NH-Furniture-dinosaurtrack.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Dunkleosteus', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/0c/NH-Furniture-dunkleosteus.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Eusthenopteron', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/8/8c/NH-Furniture-eusthenopteron.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Juramaia', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/7/73/NH-Furniture-juramaia.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Myllokunmingia', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/f/fb/NH-Furniture-myllokunmingia.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Shark-tooth pattern', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/4/44/NH-Furniture-sharktoothpattern.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Trilobite', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/4/42/NH-Furniture-trilobite.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Ankylo skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/8/8e/NH-Furniture-ankyloskull.png/revision/latest/scale-to-width-down/72?cb=20200404013825'}, {'name': 'Ankylo torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/2/25/NH-Furniture-ankylotorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Ankylo tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/e/ee/NH-Furniture-ankylotail.png/revision/latest/scale-to-width-down/72?cb=20200404013825'}, {'name': 'Archelon skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/c/c5/NH-Furniture-archelonskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Archelon tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/5/57/NH-Furniture-archelontail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Brachio skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/f/f2/NH-Furniture-brachioskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Brachio chest', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/d/dd/NH-Furniture-brachiochest.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Brachio pelvis', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/e/e3/NH-Furniture-brachiopelvis.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Brachio tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/e/e9/NH-Furniture-brachiotail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Deinony torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/b/b5/NH-Furniture-deinonytorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Deinony tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/a/a0/NH-Furniture-deinonytail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Dimetrodon skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/8/8a/NH-Furniture-dimetrodonskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Dimetrodon torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/b/ba/NH-Furniture-dimetrodontorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Diplo skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/b/b3/NH-Furniture-diploskull.png/revision/latest/scale-to-width-down/72?cb=20200404013922'}, {'name': 'Diplo neck', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/08/NH-Furniture-diploneck.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Diplo chest', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/b/bc/NH-Furniture-diplochest.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Diplo pelvis', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/9/94/NH-Furniture-diplopelvis.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Diplo tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/2/2c/NH-Furniture-diplotail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Diplo tail tip', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/8/86/NH-Furniture-diplotailtip.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Iguanodon skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/a/a8/NH-Furniture-iguanodonskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Iguanodon torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/09/NH-Furniture-iguanodontorso.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Iguanodon tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/02/NH-Furniture-iguanodontail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Mammoth skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/a/a6/NH-Furniture-mammothskull.png/revision/latest/scale-to-width-down/72?cb=20200404013828'}, {'name': 'Mammoth torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/e/eb/NH-Furniture-mammothtorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Megacero skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/07/NH-Furniture-megaceroskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Megacero torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/4/4d/NH-Furniture-megacerotorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Megacero tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/3/3c/NH-Furniture-megacerotail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Left megalo side', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/2/22/NH-Furniture-leftmegaloside.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Right megalo side', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/8/84/NH-Furniture-rightmegaloside.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Ophthalmo skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/d/da/NH-Furniture-ophthalmoskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Ophthalmo torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/2/2f/NH-Furniture-ophthalmotorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Pachysaurus skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/f/f7/NH-Furniture-pachysaurusskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Pachysaurus tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/5/53/NH-Furniture-pachysaurustail.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Parasaur skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/8/8e/NH-Furniture-parasaurskull.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Parasaur torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/f/fa/NH-Furniture-parasaurtorso.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Parasaur tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/04/NH-Furniture-parasaurtail.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Plesio skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/a/a9/NH-Furniture-plesioskull.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Plesio tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/1/13/NH-Furniture-plesioneck.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Plesio body', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/9/9f/NH-Furniture-plesiobody.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Right ptera wing', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/a/a1/NH-Furniture-rightpterawing.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Ptera body', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/6/65/NH-Furniture-pterabody.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Left ptera wing', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/1/11/NH-Furniture-leftpterawing.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Right quetzal wing', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/7/71/NH-Furniture-rightquetzalwing.png/revision/latest/scale-to-width-down/72?cb=20200404014152'}, {'name': 'Quetzal torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/7/70/NH-Furniture-quetzaltorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Left quetzal wing', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/7/74/NH-Furniture-leftquetzalwing.png/revision/latest/scale-to-width-down/72?cb=20200404014103'}, {'name': 'Sabertooth skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/f/f5/NH-Furniture-sabertoothskull.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Sabertooth tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/a/a6/NH-Furniture-sabertoothtail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Spino skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/0c/NH-Furniture-spinoskull.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Spino torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/c/cb/NH-Furniture-spinotorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Spino tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/7/76/NH-Furniture-spinotail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Stego skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/9/93/NH-Furniture-stegoskull.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Stego torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/0/0c/NH-Furniture-stegotorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Stego tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/c/c5/NH-Furniture-stegotail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Tricera skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/9/97/NH-Furniture-triceraskull.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'Tricera torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/2/2a/NH-Furniture-triceratorso.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}, {'name': 'Tricera tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/5/5a/NH-Furniture-triceratail.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'T. rex skull', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/1/14/NH-Furniture-trexskull.png/revision/latest/scale-to-width-down/72?cb=20200404013828'}, {'name': 'T. rex torso', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/e/e3/NH-Furniture-trextorso.png/revision/latest/scale-to-width-down/72?cb=20200404013827'}, {'name': 'T. rex tail', 'img': 'https://vignette.wikia.nocookie.net/animalcrossing/images/8/8f/NH-Furniture-trextail.png/revision/latest/scale-to-width-down/72?cb=20200404013826'}]
+            function needed_button(index_value){
+                return `<span class="add-fossil" onclick="addFossil(${index_value})">✔️</span> `
+            }
+            
+            function owned_button(index_value){
+                return `<span class="delete-fossil" onclick="deleteFossil(${index_value})">❌</span> <span class="add-extra-fossil" onclick="addExtra(${index_value})">➕</span> `
+            }
+            
+            function extras_button(index_value){
+                return `<span class="delete-extra-fossil" onclick="deleteExtra(${index_value})">❌</span> `
+            }
+            
+            
+            function generate_fossil_html(index, button_function, count){
+                var fossil_name = fossil_list[index]['name']
+                var fossil_img = fossil_list[index]['img']
+                if (count > 1){
+                    var fossil_count = `( x${ count.toString() } )`
+                }else{
+                    var fossil_count = ""
+                }
+                
+                var string = `<div class="fossil-item">
+                    <h3>
+                        ${fossil_name} ${fossil_count} 
+                        ${button_function(index)}
+                    </h3>
+                    <img src="${fossil_img}">
+                </div>`
+                return string
+            }
+            
+            function generate_fossil_list(display_list, button_function){
+                var element_string = ""
+                for (var i = 0; i < display_list.length; i ++){
+                    if( display_list[i] > 0 ){
+                        var count = display_list[i]
+                        element_string += generate_fossil_html(i, button_function, count)
+                    }
+                }
+                return element_string
+            }
+            
+            function generate_fossil_lists(){
+                console.log(window.localStorage)
+                 var needed = generate_fossil_list( get_state( 'neededList'), needed_button )
+                 var owned = generate_fossil_list( get_state( 'ownedList'), owned_button )
+                 var extras = generate_fossil_list( get_state( 'extraList'), extras_button )
+                 return [needed, owned, extras]
+            }
+            
+            function render_fossil_lists(generated_fossil_lists){
+                document.getElementById('needed').innerHTML = generated_fossil_lists[0]
+                document.getElementById('owned').innerHTML = generated_fossil_lists[1]
+                document.getElementById('extras').innerHTML = generated_fossil_lists[2]
+                
+                document.getElementById('have').innerHTML = get_state( 'ownedList' ).filter( function(item){ return item > 0 } ).length
+                
+                document.getElementById('total').innerHTML = fossil_list.length
+                
+                if ( document.getElementById('have').innerHTML == document.getElementById('total').innerHTML ){
+                    document.getElementById('congrats').innerHTML = "🎉YA DID IT🎉"
+                }
+            }
+            
+            function set_state(name, value){
+                window.localStorage.setItem(name, JSON.stringify( value ) )
+            }
+            
+            function get_state(name){
+                return JSON.parse( window.localStorage.getItem( name ) ) 
+            }
+            
+            function create_initial_state(){
+                if( get_state('neededList') == null ){
+                    set_state('neededList', new Array(fossil_list.length).fill(1) )
+                    set_state('ownedList', new Array(fossil_list.length).fill(0) )
+                }
+                
+                if( get_state('extraList') == null ){
+                    set_state('extraList', new Array(fossil_list.length).fill(0) )
+                }
+            }
+            create_initial_state()
+            
+            window.onload=function(){
+                render_fossil_lists(generate_fossil_lists())
+            }
+            
+            <!--action functions-->
+            
+            function addFossil(index){
+                var currentNeeded = get_state('neededList')
+                currentNeeded[index] -= 1
+                set_state('neededList', currentNeeded)
+                
+                var currentOwned = get_state('ownedList')
+                currentOwned[index] += 1
+                set_state('ownedList', currentOwned)
+                
+                render_fossil_lists(generate_fossil_lists())
+            }
+            
+            function deleteFossil(index){
+                var currentNeeded = get_state('neededList')
+                currentNeeded[index] += 1
+                set_state('neededList', currentNeeded)
+                
+                var currentOwned = get_state('ownedList')
+                currentOwned[index] -= 1
+                set_state('ownedList', currentOwned)
+                
+                render_fossil_lists(generate_fossil_lists())
+            }
+            
+            function addExtra(index){
+                var currentExtras = get_state('extraList')
+                currentExtras[index] += 1
+                set_state('extraList', currentExtras)
+                
+                render_fossil_lists(generate_fossil_lists())
+            }
+            
+            function deleteExtra(index){
+                var currentExtras = get_state('extraList')
+                currentExtras[index] -= 1
+                set_state('extraList', currentExtras)
+                
+                render_fossil_lists(generate_fossil_lists())
+            }
+            
+        </script>
+    </head>
+    <body>
+        <div class="counter">
+            <span id="have"></span> / <span id="total"></span>
+        </div>
+        <center>
+            <h1><img src="https://nookipedia.com/w/images/b/b6/Blathers_PC_icon.png" height="100" width="100"><span id="title">Fossil Tracker</span><img src="https://nookipedia.com/w/images/b/b6/Blathers_PC_icon.png" height="100" width="100"></h1>
+            <div class="container">
+                <div class="list">
+                    <h2> Needed Fossils </h2>
+                    <div id="congrats" ></div>
+                    <div id="needed">
+                    </div>
+                </div>
+                <div class="list">
+                    <h2> Owned Fossils </h2>
+                    <div id="owned">
+                    </div>
+                </div>
+                <div class="list">
+                    <h2> Extra Fossils </h2>
+                    <div id="extras">
+                    </div>
+                </div>
+            </div>
+        </center>
+    </body>
+</html>
